@@ -1,0 +1,37 @@
+name: Create Pull Request
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create_pull_request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create new branch
+        run: git checkout -b feature-branch
+
+      # Make changes to your code here
+
+      - name: Commit changes
+        run: |
+          git add .
+          git commit -m "Add new feature"
+
+      - name: Push changes to origin
+        uses: ad-m/github-push-action@master
+        with:
+          branch: feature-branch
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: feature-branch
+          title: New Feature
+          body: |
+            Add new feature
